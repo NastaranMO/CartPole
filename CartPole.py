@@ -17,12 +17,12 @@ for rep in range(number_of_repetitions):
     DQN_agent = DeepQLearningAgent(env.observation_space.shape[0], env.action_space.n)
     # Train the agent
     for ep in range(number_of_episodes):
-        s = env.reset()
+        s = env.reset()[0]
         s = np.reshape(s, [1, DQN_agent.n_states])
         done = False
         while not done:
             a = DQN_agent.select_action(s, policy="egreedy", epsilon=0.1)
-            s_prime, r, done, _ = env.step(a)
+            s_prime, r, done, _, _ = env.step(a)
             s_prime = np.reshape(s_prime, [1, DQN_agent.n_states])
             DQN_agent.remember(s, a, r, s_prime, done)
             
@@ -34,8 +34,10 @@ for rep in range(number_of_repetitions):
         # DQN_agent.replay()
         # Evaluate the agent
         if ep % 10 == 0:
+            print("Episode: {}".format(ep))
             mean_reward = DQN_agent.evaluate(env_eval)
             mean_rewards.append(mean_reward)
+            print(f"Reward for episode {ep} is {mean_reward}")
 
     result[rep] = np.array(mean_rewards)
     
