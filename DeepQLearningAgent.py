@@ -32,14 +32,14 @@ class DeepQLearningAgent:
     
     def select_action(self, s, policy="egreedy", epsilon=None, temp=None):
         if policy == "greedy":
-            a = argmax(self.model.predict(s))
+            a = argmax(self.model.predict(s, verbose=0))
         elif policy == "egreedy":
             # Explore: take a random action
             if np.random.rand() < epsilon:
                 a = np.random.randint(0, self.n_actions)
             # Exploit: take the greedy action
             else:
-                a = argmax(self.model.predict(s))
+                a = argmax(self.model.predict(s, verbose=0))
         # elif policy == "softmax":
         #     if temp is None:
         #         raise KeyError("Provide a temperature")
@@ -61,7 +61,8 @@ class DeepQLearningAgent:
             target = reward
             if not done:
               target = reward + self.gamma * np.amax(self.model.predict(next_state, verbose=0)[0])
-
+            target_predicted = self.model.predict(state, verbose=0)
+            target_predicted[0][action] = target
             self.model.fit(state, target, epochs=1, verbose=0)
 
     def evaluate(self, eval_env, number_of_eval_episodes = 30, max_episode_length=500):
@@ -69,7 +70,7 @@ class DeepQLearningAgent:
         total_rewards = []
         
         for e in range(number_of_eval_episodes):
-            s = eval_env.reset()
+            s = eval_env.reset()[0]
             s = np.reshape(s, [1, self.n_states])
             episode_rewards = 0
 
@@ -77,7 +78,7 @@ class DeepQLearningAgent:
                 # Select the best action
                 a = self.select_action(s, policy="greedy")
                 # Take the action
-                s_prime, r, done, _ = eval_env.step(a)
+                s_prime, r, done, _, _ = eval_env.step(a)
                 episode_rewards += r
                 s_prime = np.reshape(s_prime, [1, self.n_states])
                 if done:
