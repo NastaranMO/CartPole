@@ -63,7 +63,7 @@ class DeepQLearningAgent:
               target = reward + self.gamma * np.amax(self.model.predict(next_state, verbose=0)[0])
             target_predicted = self.model.predict(state, verbose=0)
             target_predicted[0][action] = target
-            self.model.fit(state, target, epochs=1, verbose=0)
+            self.model.fit(state, target_predicted, epochs=1, verbose=0)
 
     def evaluate(self, eval_env, number_of_eval_episodes = 30, max_episode_length=500):
         # Evaluate the performance for 30 episodes
