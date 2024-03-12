@@ -1,0 +1,10 @@
+name: RL_2
+channels:
+  - defaults
+dependencies:
+  - pytorch
+  - matplotlib
+  - seaborn
+  - jupyter
+  - conda-forge::gymnasium
+prefix: /home/tom/.conda/envs/RL_2
