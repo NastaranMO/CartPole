@@ -60,9 +60,13 @@ class DeepQLearningAgent:
         for state, action, reward, next_state, done in sample_batch:
             target = reward
             if not done:
+              # Bellman equation to calculate the target Q-vlaue
               target = reward + self.gamma * np.amax(self.model.predict(next_state, verbose=0)[0])
+            # Predict Q-values for the current state for all actions
             target_predicted = self.model.predict(state, verbose=0)
+            # Update the Q-value for the taken action to the calculated target Q-value
             target_predicted[0][action] = target
+            # Minimize the loss between the predicted Q-values and the target Q-values for each action
             self.model.fit(state, target_predicted, epochs=1, verbose=0)
 
     def evaluate(self, eval_env, number_of_eval_episodes = 30, max_episode_length=500):
