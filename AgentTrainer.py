@@ -12,6 +12,7 @@ import os
 
 from DQA import DQN_Agent
 from plotter import LearningCurvePlot
+from utils import smooth
 
 
 def main(raw_args=None):
@@ -157,6 +158,8 @@ def DQN_learning(env, args):
 
 
 def average_over_repetitions(env, args):
+    smoothing_window = 9
+
     print(f"Running with arguments =====>: {args}")
     num_evaluation_points = args.num_episodes // args.eval_interval
     returns_over_repetitions = np.zeros((args.num_repetitions, num_evaluation_points))
@@ -168,7 +171,7 @@ def average_over_repetitions(env, args):
     # Plotting the average performance
     episodes = np.arange(num_evaluation_points) * args.eval_interval
     average_returns = np.mean(returns_over_repetitions, axis=0)
-
+    average_returns = smooth(average_returns, smoothing_window)
     return np.array([episodes, average_returns])
 
 

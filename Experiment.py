@@ -7,47 +7,72 @@ import argparse
 
 ENV = gym.make("CartPole-v1")
 
-NUM_REPETITIONS = 5
+NUM_REPETITIONS = 20
 EVAL_EPISODES = 20
 
 
 def experiment():
     ##############################################################################################################
+    # Effect of learning rate
+    ##############################################################################################################
+    print("Running Experiment: Effect of learning rate")
+    learning_rate = [1e-2, 1e-3, 1e-4]
+    Plot = LearningCurvePlot(title="Impact of Learning Rate Variations")
+    Plot.set_ylim(0, 500)
+    for lr in learning_rate:
+        args = argparse.Namespace(
+            ER=False,
+            TN=False,
+            anneal=False,
+            num_episodes=200,
+            eval_episodes=EVAL_EPISODES,
+            eval_interval=10,
+            num_repetitions=NUM_REPETITIONS,
+            lr=lr,
+            explr="egreedy 0.3",
+            gamma=1,
+        )
+        episodes, average_returns = average_over_repetitions(ENV, args)
+        Plot.add_curve(
+            episodes,
+            average_returns,
+            label=r"lr = {}".format(lr),
+        )
+    Plot.save(name="learning-rate.png")
+    ##############################################################################################################
     # Effect of exploration strategy
     ##############################################################################################################
     print("Running Experiment: Effect of exploration strategy")
-    policy = "egreedy"
-    # epsilons = [0.03, 0.1, 0.3]
-    epsilons = [0.3]
+    # Egreedy policy
+    epsilons = [0.03, 0.1, 0.3]
     learning_rate = 1e-3
     Plot = LearningCurvePlot(
-        title="Exploration: $\epsilon$-greedy vs softmax exploration"
+        title="Exploration: $\epsilon$-greedy vs softmax vs greedy policy"
     )
     Plot.set_ylim(0, 500)
 
-    # for epsilon in epsilons:
-    #     args = argparse.Namespace(
-    #         ER=False,
-    #         TN=False,
-    #         anneal=False,
-    #         num_episodes=200,
-    #         eval_episodes=EVAL_EPISODES,
-    #         eval_interval=10,
-    #         num_repetitions=NUM_REPETITIONS,
-    #         lr=learning_rate,
-    #         explr="egreedy " + str(epsilon),
-    #         gamma=1,
-    #     )
-    #     episodes, average_returns = average_over_repetitions(ENV, args)
-    #     Plot.add_curve(
-    #         episodes,
-    #         average_returns,
-    #         label=r"$\epsilon$-greedy, $\epsilon $ = {}".format(epsilon),
-    #     )
+    for epsilon in epsilons:
+        args = argparse.Namespace(
+            ER=False,
+            TN=False,
+            anneal=False,
+            num_episodes=200,
+            eval_episodes=EVAL_EPISODES,
+            eval_interval=10,
+            num_repetitions=NUM_REPETITIONS,
+            lr=learning_rate,
+            explr="egreedy " + str(epsilon),
+            gamma=1,
+        )
+        episodes, average_returns = average_over_repetitions(ENV, args)
+        Plot.add_curve(
+            episodes,
+            average_returns,
+            label=r"$\epsilon$-greedy, $\epsilon $ = {}".format(epsilon),
+        )
 
-    policy = "softmax"
-    # temps = [0.01, 0.1, 1]
-    temps = [1]
+    # Softmax policy
+    temps = [0.01, 0.1, 1]
     for temp in temps:
         args = argparse.Namespace(
             ER=False,
@@ -67,6 +92,22 @@ def experiment():
             average_returns,
             label=r"Softmax, $\tau $ = {}".format(temp),
         )
+
+    # Greedy policy
+    args = argparse.Namespace(
+        ER=False,
+        TN=False,
+        anneal=False,
+        num_episodes=200,
+        eval_episodes=EVAL_EPISODES,
+        eval_interval=10,
+        num_repetitions=NUM_REPETITIONS,
+        lr=learning_rate,
+        explr="greedy 1",
+        gamma=1,
+    )
+    episodes, average_returns = average_over_repetitions(ENV, args)
+    Plot.add_curve(episodes, average_returns, label="Greedy")
 
     Plot.save(name="exploration.png")
 
