@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import glob
+
 
 class LearningCurvePlot:
 
@@ -29,10 +31,24 @@ class LearningCurvePlot:
         self.ax.legend()
         self.fig.savefig(name, dpi=300)
 
-episodes, average_returns = np.load('results/Namespace(ER=False, TN=False, anneal=False, num_episodes=10, eval_episodes=20, eval_interval=10, num_repetitions=1, lr=0.001, explr=\'egreedy 0.3\', gamma=1).npy')
-print(episodes)
-print(average_returns)
 
-plot = LearningCurvePlot(title="Average DQN Performance Over Repetitions")
-plot.add_curve(episodes, average_returns, label="Average Return")
-plot.save(name="dqn.png")
+# episodes, average_returns = np.load(
+#     "results/Namespace(ER=False, TN=False, anneal=False, num_episodes=200, eval_episodes=20, eval_interval=10, num_repetitions=20, lr=0.001, explr='egreedy 0.3', gamma=1).npy"
+# )
+# print(episodes)
+# print(average_returns)
+
+# plot = LearningCurvePlot(title="Average DQN Performance Over Repetitions")
+# plot.add_curve(episodes, average_returns, label="Average Return")
+# plot.save(name="dqn.png")
+
+# Plot different results
+path = "results/"
+files = glob.glob(path + "*.npy")
+for file in files:
+    episodes, average_returns = np.load(file)
+    print(episodes)
+    print(average_returns)
+    plot = LearningCurvePlot(title="Average DQN Performance Over Repetitions")
+    plot.add_curve(episodes, average_returns, label="Average Return")
+    plot.save(name="dqn.png")
