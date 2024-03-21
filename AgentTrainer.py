@@ -12,7 +12,7 @@ import os
 
 from DQA import DQN_Agent
 from plotter import LearningCurvePlot
-from utils import smooth
+from utils import smooth, linear_anneal
 
 
 def main(raw_args=None):
@@ -43,11 +43,7 @@ def main(raw_args=None):
     argparser.add_argument("--num_repetitions", default=20, type=int, help="repetions")
     argparser.add_argument("--lr", default=1e-3, type=float, help="learning rate")
     argparser.add_argument(
-        # "--explr", default="egreedy 0.3", type=str, help="Exploration Strategy"
-        "--explr",
-        default="softmax 1",
-        type=str,
-        help="Exploration Strategy",
+        "--explr", default="egreedy 0.3", type=str, help="Exploration Strategy"
     )
     argparser.add_argument("--gamma", default=1, type=float, help="Discount Factor")
 
@@ -90,6 +86,11 @@ def DQN_learning(env, args):
         episode_truncated = False  # For example reaching the maximum number of steps
 
         while not (episode_done or episode_truncated):
+            if args.anneal:
+                args.explr = linear_anneal(
+                    t=e, T=args.num_episodes, start=1, final=0.05, percentage=0.5
+                )
+                args.explr = "egreedy " + str(args.explr)
             action = agent.select_action(state, policy_str=args.explr).reshape(
                 1, 1
             )  # Sample action (e.g, epsilon-greedy)
