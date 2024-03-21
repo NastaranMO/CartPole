@@ -9,7 +9,7 @@ import tqdm
 import matplotlib.pyplot as plt
 import random
 import gymnasium as gym
-from utils import argmax, smooth, softmax
+from utils import argmax, smooth
 
 env = gym.make("CartPole-v1")
 num_actions = env.action_space.n
