@@ -17,7 +17,7 @@ from AgentTrainer import average_over_repetitions
 ENV = gym.make("CartPole-v1")
 
 def main(raw_args=None):
-    f = open('outputfile_.json')
+    f = open('outputfile_Tom.json')
     dict_list = json.load(f)
     dict_list = [dict_list[0]]
     episodes_list = []
@@ -40,7 +40,7 @@ def main(raw_args=None):
         
         episodes, average_returns = average_over_repetitions(ENV, args)
         episodes_list.append(episodes)
-        average_returns_list.append(average_returns_list)
+        average_returns_list.append(average_returns)
     e = np.array(episodes_list)
     a = np.array(average_returns_list)
     np.save('episodes_Tom', e)
