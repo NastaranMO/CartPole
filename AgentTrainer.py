@@ -147,7 +147,7 @@ def dqn_er(args, agent):
 
     # Calculate the current estimated Q-values by following the current policy
     current_q_values = agent.policy_net(states_batch).gather(1, actions_batch)
-
+    agent.steps_done += 1
     # Calculate the target Q-values by Q-learning update rule
     next_state_values = torch.zeros(agent.batch_size)
     if args.TN:
@@ -170,21 +170,18 @@ def dqn_er(args, agent):
     agent.optimizer.step()
 
     # Syncronize target and policy network to stabilize learning
-    agent.steps_done += 1
-
     if agent.steps_done % 50 == 0 & args.TN:
         agent.target_net.load_state_dict(agent.policy_net.state_dict())
 
 
 def pure_DQN(agent, state, action, next_state, reward):
     current_q_values = agent.policy_net(state).gather(1, action)
-
+    next_state_values = torch.zeros(1)
     if next_state is not None:
         with torch.no_grad():
             next_state_values = agent.policy_net(next_state).max(1)[0].detach()
-            target_q_values = (next_state_values * agent.gamma) + reward
-    else:
-        target_q_values = reward
+    target_q_values = (next_state_values * agent.gamma) + reward
+
     criterion = torch.nn.MSELoss()
     loss = criterion(current_q_values, target_q_values.unsqueeze(1))
     agent.optimizer.zero_grad()
@@ -194,8 +191,19 @@ def pure_DQN(agent, state, action, next_state, reward):
 
 
 def dqn_TN(agent, state, action, next_state, reward):
-    # TODO: Implement the target network
-    pass
+    current_q_values = agent.policy_net(state).gather(1, action)
+    next_state_values = torch.zeros(1)
+    if next_state is not None:
+        with torch.no_grad():
+            next_state_values = agent.target_net(next_state).max(1)[0].detach()
+    target_q_values = (next_state_values * agent.gamma) + reward
+
+    criterion = torch.nn.MSELoss()
+    loss = criterion(current_q_values, target_q_values.unsqueeze(1))
+    agent.optimizer.zero_grad()
+    loss.backward()
+    # torch.nn.utils.clip_grad_value_(agent.policy_net.parameters(), 100) # Clip gradients
+    agent.optimizer.step()
 
 
 def average_over_repetitions(env, args):
