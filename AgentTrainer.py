@@ -204,6 +204,9 @@ def dqn_TN(agent, state, action, next_state, reward):
     loss.backward()
     # torch.nn.utils.clip_grad_value_(agent.policy_net.parameters(), 100) # Clip gradients
     agent.optimizer.step()
+    # Syncronize target and policy network to stabilize learning
+    if agent.steps_done % 50 == 0 & args.TN:
+        agent.target_net.load_state_dict(agent.policy_net.state_dict())
 
 
 def average_over_repetitions(env, args):
