@@ -78,7 +78,7 @@ def main(raw_args=None):
 
 
 def DQN_learning(env, args):
-    agent = DQN_Agent(learning_rate=args.lr)
+    agent = DQN_Agent(**vars(args))
     reward_means = []
     for e in range(args.num_episodes):
         state = env.reset()[0]  # Sample initial state
@@ -116,7 +116,7 @@ def DQN_learning(env, args):
             if is_pure_DQN(args.ER, args.TN):
                 pure_DQN(agent, state, action, next_state, reward)
             elif args.ER == False and args.TN == True:
-                dqn_TN(agent, state, action, next_state, reward)
+                dqn_TN(agent, state, action, next_state, reward, args)
             elif len(agent.memory) >= agent.batch_size and args.ER:
                 dqn_er(args, agent)
             state = next_state
@@ -170,7 +170,7 @@ def dqn_er(args, agent):
     agent.optimizer.step()
 
     # Syncronize target and policy network to stabilize learning
-    if agent.steps_done % 50 == 0 & args.TN:
+    if agent.steps_done % args.steps == 0 & args.TN:
         agent.target_net.load_state_dict(agent.policy_net.state_dict())
 
 
@@ -190,7 +190,7 @@ def pure_DQN(agent, state, action, next_state, reward):
     agent.optimizer.step()
 
 
-def dqn_TN(agent, state, action, next_state, reward):
+def dqn_TN(agent, state, action, next_state, reward, args):
     current_q_values = agent.policy_net(state).gather(1, action)
     next_state_values = torch.zeros(1)
     if next_state is not None:
@@ -204,10 +204,8 @@ def dqn_TN(agent, state, action, next_state, reward):
     loss.backward()
     # torch.nn.utils.clip_grad_value_(agent.policy_net.parameters(), 100) # Clip gradients
     agent.optimizer.step()
-    # Syncronize target and policy network to stabilize learning
-    if agent.steps_done % 50 == 0:
+    if agent.steps_done % args.steps == 0:
         agent.target_net.load_state_dict(agent.policy_net.state_dict())
-
 
 def average_over_repetitions(env, args):
     smoothing_window = 9

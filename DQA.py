@@ -53,6 +53,9 @@ class NeuralNetwork(nn.Module):
 
         self.init_weights()
 
+
+
+
     def forward(self, x):
         return self.dqn_model(x)
 
@@ -63,7 +66,7 @@ class NeuralNetwork(nn.Module):
 
 
 class DQN_Agent:
-    def __init__(self, learning_rate=1e-3, discount_factor=1):
+    def __init__(self, learning_rate=1e-3, discount_factor=1, batch_size=32, **kwargs):
         self.steps_done = 0
         self.learning_rate = learning_rate
         self.policy_net = NeuralNetwork(num_states=4, num_actions=2)
@@ -77,7 +80,7 @@ class DQN_Agent:
         self.gamma = (
             discount_factor  # Need tuning and plot graphs for different settings
         )
-        self.batch_size = 32
+        self.batch_size = batch_size
 
     def select_action(self, state, policy_str="egreedy 0.05"):
         policy, value = policy_str.split(" ")
