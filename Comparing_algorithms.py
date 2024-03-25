@@ -44,7 +44,7 @@ def experiment():
             batch_size=BATCH_SIZE,
         )
         run_experiment(ENV, Plot, args, label=algorithm["label"])
-    Plot.save(name="dqn-TN-ER-final-result.png")
+    Plot.save(name="dqn-TN-ER.png")
 
 
 def run_experiment(env, Plot, args, label: str):
