@@ -3,7 +3,6 @@ from AgentTrainer import average_over_repetitions
 import gymnasium as gym
 import numpy as np
 import argparse
-import json
 
 ENV = gym.make("CartPole-v1")
 
@@ -48,8 +47,8 @@ def experiment():
 
 def run_experiment(env, Plot, args, label: str):
     episodes, average_returns = average_over_repetitions(env, args)
-    np.save(f"episodes_{label}", episodes)
-    np.save(f"returns_{label}", average_returns)
+    np.save(f"./results/episodes_{label}", episodes)
+    np.save(f"./results/returns_{label}", average_returns)
     Plot.add_curve(episodes, average_returns, label=label)
 
 
