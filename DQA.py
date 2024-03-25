@@ -53,9 +53,6 @@ class NeuralNetwork(nn.Module):
 
         self.init_weights()
 
-
-
-
     def forward(self, x):
         return self.dqn_model(x)
 
