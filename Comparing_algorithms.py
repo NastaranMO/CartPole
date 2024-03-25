@@ -10,9 +10,10 @@ NUM_REPETITIONS = 20
 NUM_EPISODES = 200
 EVAL_EPISODES = 20
 NUM_INTERVALS = 10
-LEARNING_RATE = 1e-3
-NUM_STEPS = 49
+LEARNING_RATE = 1e-4
+NUM_STEPS = 50
 GAMMA = 1
+BATCH_SIZE = 32
 
 
 ##############################################################################################################
@@ -31,7 +32,7 @@ def experiment():
         args = argparse.Namespace(
             ER=algorithm["ER"],
             TN=algorithm["TN"],
-            anneal=True,
+            anneal=False,
             num_episodes=NUM_EPISODES,
             eval_episodes=EVAL_EPISODES,
             eval_interval=NUM_INTERVALS,
@@ -40,9 +41,10 @@ def experiment():
             explr="egreedy 0.3",
             steps=NUM_STEPS,
             gamma=GAMMA,
+            batch_size=BATCH_SIZE,
         )
         run_experiment(ENV, Plot, args, label=algorithm["label"])
-    Plot.save(name="dqn-TN-ER.png")
+    Plot.save(name="dqn-TN-ER-final-result.png")
 
 
 def run_experiment(env, Plot, args, label: str):
