@@ -42,8 +42,8 @@ episodes, average_returns, sd = np.load(
 # average_returns = np.load("./results/27-03/returns_DQN-ER.npy")
 # sd = np.load("./results/27-03/std_DQN-ER.npy")
 
-plot = LearningCurvePlot(title="Average DQN Performance Over Repetitions")
-plot.add_curve(episodes, average_returns, label="a", std_dev=sd)
+plot = LearningCurvePlot(title="Average Double DQN Performance Over Repetitions")
+plot.add_curve(episodes, average_returns, label="Double-DQN", std_dev=sd)
 plot.save(name="double_dqn.png")
 
 # Plot different results
