@@ -58,7 +58,7 @@ python AgentTrainer.py --num_episodes=100 --steps=10 --lr=1e-3
 
 ### Results
 
-These plots are averaged over 20 repetitions across 200 episodes with parameters below. You can also find the numpy array results of these plots in the folder [results](https://github.com/NastaranMO/CartPole/tree/main/results) and plot them yourself.
+The graph is averaged over 20 repetitions across 200 episodes with parameters below. You can also find the numpy array results of this in the folder [results](https://github.com/NastaranMO/CartPole/tree/main/results) and plot them yourself.
 
 | Variable      | Value       |
 | ------------- | ----------- |
@@ -68,17 +68,7 @@ These plots are averaged over 20 repetitions across 200 episodes with parameters
 | EXPLR         | egreedy 0.3 |
 | BATCH_SIZE    | 32          |
 
-![alt text](<dqn-TN-ER(lr=1e-4,steps=50, gamma=1,policy="egreedy 0.3",batch_size=32,num_episodes=200,num_repetitions=5, eval_interval=10).png>)
-
-| Variable      | Value       |
-| ------------- | ----------- |
-| LEARNING_RATE | 1e-4        |
-| NUM_STEPS     | 50          |
-| GAMMA         | 1           |
-| EXPLR         | softmax 0.1 |
-| BATCH_SIZE    | 32          |
-
-![alt text](<dqn-TN-ER(dqn-TN-ER(lr=1e-4,steps=50, gamma=1,policy="softmax 0.1",batch_size=32,num_episodes=200,num_repetitions=5, eval_interval=10)).png>)
+![alt text](dqn-TN-ER.png)
 
 ## Experiment
 
@@ -128,8 +118,8 @@ The default values for following experiments are:
 
 #### Learning Rate
 
-![](<learning-rate(steps=50, gamma=1, policy="egreedy 0.3", batch_size=32, num_episodes=200,num_repetitions=5, eval_interval=10).png>)
+![](learning-rate.png)
 
 #### Exploration Policies
 
-![](<exploration-(lr=1e-4,steps=50, gamma=1,batch_size=32, num_episodes=200,num_repetitions=5, eval_interval=10).png>)
+![](exploration.png)
