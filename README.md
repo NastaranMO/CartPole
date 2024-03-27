@@ -5,6 +5,8 @@
     - [Options](#options)
     - [Example](#example)
   - [Comparing DQN, DQN-ER, DQN-TN, and DQN-ER-TN](#comparing-dqn-dqn-er-dqn-tn-and-dqn-er-tn)
+    - [How to Run](#how-to-run-1)
+    - [Results](#results)
   - [Experiment](#experiment)
     - [How to Run Experiments](#how-to-run-experiments)
     - [Experiment Results from Random Search](#experiment-results-from-random-search)
@@ -49,6 +51,12 @@ python AgentTrainer.py --num_episodes=100 --steps=10 --lr=1e-3
 ```
 
 ## Comparing DQN, DQN-ER, DQN-TN, and DQN-ER-TN
+
+### How to Run
+
+- Run the command `python Comparing_algorithms.py`
+
+### Results
 
 These plots are averaged over 20 repetitions across 200 episodes with parameters below. You can also find the numpy array results of these plots in the folder [results](https://github.com/NastaranMO/CartPole/tree/main/results) and plot them yourself.
 
