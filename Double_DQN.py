@@ -22,6 +22,7 @@ args = argparse.Namespace(
     explr="egreedy 0.3",
     gamma=1,
     steps=50,
+    batch_size=32,
 )
 
 
@@ -36,6 +37,8 @@ def DQN_learning(env, args):
         episode_truncated = False  # For example reaching the maximum number of steps
 
         while not (episode_done or episode_truncated):
+            # Do the annealing gradually to reduce the exploration
+
             # Action selection
             action = agent.select_action(state, policy_str=args.explr).reshape(
                 1, 1
@@ -52,8 +55,9 @@ def DQN_learning(env, args):
             )  # If the epsidoe terminates no next state
             # Store experience in buffer
             agent.memory.append((state, action, next_state, reward))
-            double_dqn(args, agent)
             # Update policy
+            if len(agent.memory) >= agent.batch_size:
+                double_dqn(args, agent)
             state = next_state
         # Evaluate the performance every eval_interval episodes
         if e % args.eval_interval == 0:
@@ -76,19 +80,18 @@ def double_dqn(args, agent):
     states_batch = torch.cat(states_tuple)
     actions_batch = torch.cat(actions_tuple)
     rewards_batch = torch.cat(rewards_tuple)
+    next_states_batch = torch.cat([s for s in next_states_tuple if s is not None])
 
     # Predict the Q-values
     predicted_q_values = agent.policy_net(states_batch).gather(1, actions_batch)
     agent.steps_done += 1
     # Calculate the target Q-values by Q-learning update rule
-    next_state_actions = torch.zeros(agent.batch_size)
-    for i in range(len(next_states_tuple)):
-        if next_states_tuple[i] is not None:
-            with torch.no_grad():  # Speed up the computation by not tracking gradients
-                next_state_actions[i] = agent.policy_net(next_states_tuple[i]).max(1)[0]
+    # next_state_actions = torch.zeros(agent.batch_size)
+    _, next_state_actions = agent.policy_net(next_states_batch).max(1)
 
-    next_state_values = (
-        agent.target_net(next_states_tuple).gather(1, next_state_actions).squeeze(1)
+    print("next_state_actions", next_state_actions)
+    next_state_values = agent.target_net(next_states_batch).gather(
+        1, next_state_actions.unsqueeze(1)
     )
     target_q_values = (next_state_values * agent.gamma) + rewards_batch
 
