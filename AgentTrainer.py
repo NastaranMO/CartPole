@@ -225,8 +225,9 @@ def average_over_repetitions(env, args):
     # Plotting the average performance
     episodes = np.arange(num_evaluation_points) * args.eval_interval
     average_returns = np.mean(returns_over_repetitions, axis=0)
+    average_returns_std = np.std(returns_over_repetitions, axis=0)
     average_returns = smooth(average_returns, smoothing_window)
-    return np.array([episodes, average_returns])
+    return np.array([episodes, average_returns,average_returns_std])
 
 
 if __name__ == "__main__":

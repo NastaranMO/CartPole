@@ -41,13 +41,14 @@ def run_experiment(Plot, label: str, values, method):
         elif method == "num_steps":
             args.steps = value
 
-        episodes, average_returns = average_over_repetitions(ENV, args)
+        episodes, average_returns, std = average_over_repetitions(ENV, args)
         Plot.add_curve(
             episodes,
             average_returns,
             label=label + " " + str(value),
+            std_dev = std
         )
-        path = "./results"
+        path = "./results/std/"
         if not os.path.exists(path):
             os.mkdir(path)
         path += f"/{str(args)}"
