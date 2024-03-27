@@ -2,8 +2,27 @@ import numpy as np
 import torch
 from utils import smooth
 import tqdm
+import gymnasium as gym
+import argparse
 
 from DQA import DQN_Agent
+
+env = gym.make("CartPole-v1")
+# Default arguments for DQN-TN-ER
+args = argparse.Namespace(
+    ER=True,
+    TN=True,
+    anneal=True,
+    num_episodes=200,
+    eval_episodes=20,
+    eval_interval=10,
+    num_repetitions=20,
+    lr=1e-4,
+    # explr="softmax 0.1",
+    explr="egreedy 0.3",
+    gamma=1,
+    steps=50,
+)
 
 
 def DQN_learning(env, args):
@@ -104,3 +123,7 @@ def average_over_repetitions(env, args):
     average_returns_std = np.std(returns_over_repetitions, axis=0)
     average_returns = smooth(average_returns, smoothing_window)
     return np.array([episodes, average_returns, average_returns_std])
+
+
+if __name__ == "__main__":
+    average_over_repetitions(env, args)
