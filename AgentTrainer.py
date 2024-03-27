@@ -153,14 +153,13 @@ def dqn_er(args, agent):
     agent.steps_done += 1
     # Calculate the target Q-values by Q-learning update rule
     next_state_values = torch.zeros(agent.batch_size)
+    net = agent.policy_net
     if args.TN:
         net = agent.target_net
-    else:
-        net = agent.policy_net
     for i in range(len(next_states_tuple)):
         if next_states_tuple[i] is not None:
             with torch.no_grad():  # Speed up the computation by not tracking gradients
-                next_state_values[i] = agent.policy_net(next_states_tuple[i]).max(1)[0]
+                next_state_values[i] = net(next_states_tuple[i]).max(1)[0]
     target_q_values = (next_state_values * agent.gamma) + rewards_batch
 
     # Update current policy
@@ -227,7 +226,7 @@ def average_over_repetitions(env, args):
     average_returns = np.mean(returns_over_repetitions, axis=0)
     average_returns_std = np.std(returns_over_repetitions, axis=0)
     average_returns = smooth(average_returns, smoothing_window)
-    return np.array([episodes, average_returns,average_returns_std])
+    return np.array([episodes, average_returns, average_returns_std])
 
 
 if __name__ == "__main__":
