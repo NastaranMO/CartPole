@@ -25,8 +25,8 @@ args = argparse.Namespace(
     eval_interval=10,
     num_repetitions=NUM_REPETITIONS,
     lr=LEARNING_RATE,
-    explr="softmax 0.1",
-    # explr="egreedy 0.3",
+    # explr="softmax 0.1",
+    explr="egreedy 0.3",
     gamma=1,
     steps=50,
 )

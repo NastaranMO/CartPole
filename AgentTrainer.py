@@ -27,7 +27,7 @@ def main(raw_args=None):
     )
     # TODO: I changed the default value of TN to True
     argparser.add_argument(
-        "--TN", default=False, action="store_true", help="Target Network"
+        "--TN", default=True, action="store_true", help="Target Network"
     )
 
     argparser.add_argument(
@@ -37,6 +37,9 @@ def main(raw_args=None):
         "--num_episodes", default=200, type=int, help="training episodes"
     )
     argparser.add_argument(
+        "--steps", default=50, type=int, help="steps to update target network"
+    )
+    argparser.add_argument(
         "--eval_episodes", default=20, type=int, help="Evaluation episodes"
     )
     argparser.add_argument(
@@ -44,7 +47,7 @@ def main(raw_args=None):
     )
     # TODO: I changed the default value of num_repetitions to 5
     argparser.add_argument("--num_repetitions", default=5, type=int, help="repetions")
-    argparser.add_argument("--lr", default=1e-3, type=float, help="learning rate")
+    argparser.add_argument("--lr", default=1e-4, type=float, help="learning rate")
     argparser.add_argument(
         "--explr", default="egreedy 0.3", type=str, help="Exploration Strategy"
     )
@@ -206,6 +209,7 @@ def dqn_TN(agent, state, action, next_state, reward, args):
     agent.optimizer.step()
     if agent.steps_done % args.steps == 0:
         agent.target_net.load_state_dict(agent.policy_net.state_dict())
+
 
 def average_over_repetitions(env, args):
     smoothing_window = 9

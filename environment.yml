@@ -1,4 +1,4 @@
-name: RL_2
+name: CartPole
 channels:
   - defaults
 dependencies:
