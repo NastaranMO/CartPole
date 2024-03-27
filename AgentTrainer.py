@@ -11,6 +11,7 @@ import gymnasium as gym
 import os
 
 from DQA import DQN_Agent
+from Double_DQN import double_dqn
 from plotter import LearningCurvePlot
 from utils import smooth, linear_anneal
 
@@ -25,7 +26,6 @@ def main(raw_args=None):
     argparser.add_argument(
         "--ER", default=True, action="store_true", help="Experience Replay"
     )
-    # TODO: I changed the default value of TN to True
     argparser.add_argument(
         "--TN", default=True, action="store_true", help="Target Network"
     )
@@ -45,8 +45,7 @@ def main(raw_args=None):
     argparser.add_argument(
         "--eval_interval", default=10, type=int, help="Evaluation Interval"
     )
-    # TODO: I changed the default value of num_repetitions to 5
-    argparser.add_argument("--num_repetitions", default=5, type=int, help="repetions")
+    argparser.add_argument("--num_repetitions", default=20, type=int, help="repetions")
     argparser.add_argument("--lr", default=1e-4, type=float, help="learning rate")
     argparser.add_argument(
         "--explr", default="egreedy 0.3", type=str, help="Exploration Strategy"
@@ -111,7 +110,6 @@ def DQN_learning(env, args):
                 if episode_done
                 else torch.tensor(next_state, dtype=torch.float32).unsqueeze(0)
             )  # If the epsidoe terminates no next state
-
             # Store experience in buffer
             if args.ER:
                 agent.memory.append((state, action, next_state, reward))
