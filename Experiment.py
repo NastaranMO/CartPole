@@ -11,7 +11,7 @@ NUM_REPETITIONS = 20
 NUM_EPISODES = 200
 EVAL_EPISODES = 20
 NUM_INTERVALS = 10
-LEARNING_RATE = 1e-3
+LEARNING_RATE = 1e-4
 NUM_STEPS = 50
 GAMMA = 1
 
@@ -25,7 +25,8 @@ args = argparse.Namespace(
     eval_interval=10,
     num_repetitions=NUM_REPETITIONS,
     lr=LEARNING_RATE,
-    explr="egreedy 0.3",
+    explr="softmax 0.1",
+    # explr="egreedy 0.3",
     gamma=1,
     steps=50,
 )
@@ -46,6 +47,11 @@ def run_experiment(Plot, label: str, values, method):
             average_returns,
             label=label + " " + str(value),
         )
+        path = "./results"
+        if not os.path.exists(path):
+            os.mkdir(path)
+        path += f"/{str(args)}"
+        np.save(path, [episodes, average_returns])
 
 
 ##############################################################################################################
@@ -99,8 +105,8 @@ def run_experiment_network_architecture():
 
 def experiment():
     # run_experiment_exploration_strategy()
-    run_experiment_learning_rate()
-    # run_experiment_num_steps()
+    # run_experiment_learning_rate()
+    run_experiment_num_steps()
     # run_experiment_network_architecture()
 
 

@@ -44,13 +44,13 @@ def experiment():
             batch_size=BATCH_SIZE,
         )
         run_experiment(ENV, Plot, args, label=algorithm["label"])
-    Plot.save(name="dqn-TN-ER.png")
+    Plot.save(name="dqn-TN-ER-softmax.png")
 
 
 def run_experiment(env, Plot, args, label: str):
     episodes, average_returns = average_over_repetitions(env, args)
-    np.save(f"./results/episodes_{label}", episodes)
-    np.save(f"./results/returns_{label}", average_returns)
+    np.save(f"./results/episodes_{label}_softmax", episodes)
+    np.save(f"./results/returns_{label}_softmax", average_returns)
     Plot.add_curve(episodes, average_returns, label=label)
 
 
