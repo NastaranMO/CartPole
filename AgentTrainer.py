@@ -148,8 +148,8 @@ def dqn_er(args, agent):
     actions_batch = torch.cat(actions_tuple)
     rewards_batch = torch.cat(rewards_tuple)
 
-    # Calculate the current estimated Q-values by following the current policy
-    current_q_values = agent.policy_net(states_batch).gather(1, actions_batch)
+    # Predict the Q-values
+    predicted_q_values = agent.policy_net(states_batch).gather(1, actions_batch)
     agent.steps_done += 1
     # Calculate the target Q-values by Q-learning update rule
     next_state_values = torch.zeros(agent.batch_size)
@@ -166,7 +166,7 @@ def dqn_er(args, agent):
     # Update current policy
     # criterion = torch.nn.SmoothL1Loss() # Compute Huber loss <= works better
     criterion = torch.nn.MSELoss()
-    loss = criterion(current_q_values, target_q_values.unsqueeze(1))
+    loss = criterion(predicted_q_values, target_q_values.unsqueeze(1))
     agent.optimizer.zero_grad()
     loss.backward()
     # torch.nn.utils.clip_grad_value_(agent.policy_net.parameters(), 100) # Clip gradients
@@ -178,7 +178,7 @@ def dqn_er(args, agent):
 
 
 def pure_DQN(agent, state, action, next_state, reward):
-    current_q_values = agent.policy_net(state).gather(1, action)
+    predicted_q_values = agent.policy_net(state).gather(1, action)
     next_state_values = torch.zeros(1)
     if next_state is not None:
         with torch.no_grad():
@@ -186,7 +186,7 @@ def pure_DQN(agent, state, action, next_state, reward):
     target_q_values = (next_state_values * agent.gamma) + reward
 
     criterion = torch.nn.MSELoss()
-    loss = criterion(current_q_values, target_q_values.unsqueeze(1))
+    loss = criterion(predicted_q_values, target_q_values.unsqueeze(1))
     agent.optimizer.zero_grad()
     loss.backward()
     # torch.nn.utils.clip_grad_value_(agent.policy_net.parameters(), 100) # Clip gradients
@@ -194,7 +194,7 @@ def pure_DQN(agent, state, action, next_state, reward):
 
 
 def dqn_TN(agent, state, action, next_state, reward, args):
-    current_q_values = agent.policy_net(state).gather(1, action)
+    predicted_q_values = agent.policy_net(state).gather(1, action)
     next_state_values = torch.zeros(1)
     if next_state is not None:
         with torch.no_grad():
@@ -202,7 +202,7 @@ def dqn_TN(agent, state, action, next_state, reward, args):
     target_q_values = (next_state_values * agent.gamma) + reward
 
     criterion = torch.nn.MSELoss()
-    loss = criterion(current_q_values, target_q_values.unsqueeze(1))
+    loss = criterion(predicted_q_values, target_q_values.unsqueeze(1))
     agent.optimizer.zero_grad()
     loss.backward()
     # torch.nn.utils.clip_grad_value_(agent.policy_net.parameters(), 100) # Clip gradients
