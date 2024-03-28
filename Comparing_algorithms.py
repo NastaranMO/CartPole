@@ -102,7 +102,7 @@ def load_arrays():
 
 
 if __name__ == "__main__":
-    # experiment()
+    experiment()
 
     # Load the arrays containing the final returns and standard deviations for each configuration
     returns, std_devs = load_arrays()
