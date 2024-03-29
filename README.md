@@ -20,8 +20,10 @@
 - Install `python` if you don't already have it
 - Install [miniconda](https://docs.anaconda.com/free/miniconda/miniconda-install/)
 - Clone the project: `git clone git@github.com:NastaranMO/CartPole.git`
-- Create a conda environement: `conda env create -f environment.yml`
+- Create a conda environement: `conda env create -n CartPole`
 - Activate the environment: `conda activate CartPole`
+- install the packages `Pytorch`, `Matplotlib`, `Numpy` and `gymnasium` (from conda-forge)
+- Note: the package tqdm might need to be installed with pip for gymnasium to function
 - Run the `AgentTrainer` the command below:
 
 ```bash
