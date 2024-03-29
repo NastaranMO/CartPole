@@ -68,7 +68,6 @@ The graph is averaged over 20 repetitions across 200 episodes with parameters be
 | EXPLR         | egreedy 0.3 |
 | BATCH_SIZE    | 32          |
 
-![alt text](dqn-TN-ER.png)
 
 ## Experiment
 
@@ -100,7 +99,6 @@ python Randomsearch.py
 | EXPLR           | softmax 1.2576454147068064 |
 | BATCH_SIZE      | 128                        |
 
-![](random-search-results.png)
 
 ### Experiment Results from Grid Search
 
@@ -117,15 +115,3 @@ The default values for following experiments are:
 | GAMMA           | 1           |
 | EXPLR           | egreedy 0.3 |
 | BATCH_SIZE      | 32          |
-
-#### Number of Steps
-
-![](num-steps.png)
-
-#### Learning Rate
-
-![](learning-rate.png)
-
-#### Exploration Policies
-
-![](exploration.png)
