@@ -74,10 +74,16 @@ The graph is averaged over 20 repetitions across 200 episodes with parameters be
 
 ### How to Run Experiments
 
-We performed a greed and random search hyperparameter tuning with different settings for learning rate, exploration startegies, and number of steps. You can explore the result of the mentioned experiments by running the command below:
+We performed a greed and random search hyperparameter tuning with different settings for learning rate, exploration startegies, and number of steps. You can explore the result of the mentioned experiments by running the commands below:
 
+Grid Search: (uncomment the hyperparameters you wish to explore)
 ```bash
 python Experiment.py
+```
+
+Randomsearch: 
+```bash
+python Randomsearch.py
 ```
 
 ### Experiment Results from Random Search
