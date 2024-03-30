@@ -21,7 +21,6 @@ def main(raw_args=None):
     ##############################################################################################################
     # Parsing command line arguments
     ##############################################################################################################
-
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "--ER", default=True, action="store_true", help="Experience Replay"

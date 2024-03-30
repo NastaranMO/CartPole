@@ -19,7 +19,7 @@ GAMMA = 1
 args = argparse.Namespace(
     ER=True,
     TN=True,
-    anneal=True,
+    anneal=False,
     num_episodes=200,
     eval_episodes=EVAL_EPISODES,
     eval_interval=10,
@@ -40,14 +40,12 @@ def run_experiment(Plot, label: str, values, method):
             args.lr = value
         elif method == "num_steps":
             args.steps = value
-
+        print(f"args=================>: {args}")
         episodes, average_returns, std = average_over_repetitions(ENV, args)
         Plot.add_curve(
-            episodes,
-            average_returns,
-            label=label + " " + str(value),
-            std_dev = std
+            episodes, average_returns, label=label + " " + str(value), std_dev=std
         )
+        print(f"args after =================>: {args}")
         path = "./results/std/"
         if not os.path.exists(path):
             os.mkdir(path)
