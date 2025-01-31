@@ -101,6 +101,7 @@ python Randomsearch.py
 | EXPLR           | softmax 1.2576454147068064 |
 | BATCH_SIZE      | 128                        |
 
+![Alt text](random-search-results.png)
 
 ### Experiment Results from Grid Search
 
@@ -117,3 +118,16 @@ The default values for following experiments are:
 | GAMMA           | 1           |
 | EXPLR           | egreedy 0.3 |
 | BATCH_SIZE      | 32          |
+
+### Ablation Bar Plot
+![Alt text](Ablation_barplot.png)
+
+### The Effect of exploration rate
+![Alt text](exploration.png)
+
+### The Effect of Learning Rate
+![Alt text](learning-rate.png)
+
+### The Effect of Number of Steps
+![Alt text](num-steps.png)
+
